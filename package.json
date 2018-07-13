@@ -1,0 +1,21 @@
+{
+  "name": "whatpr",
+  "version": "0.1.0",
+  "description": "Query the wrs2 path rows",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava test.js"
+  },
+  "keywords": [
+    "landsat",
+    "spatialite",
+    "satellite-imagery",
+    "geojson"
+  ],
+  "author": "Marc Farra <marcfarra@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ava": "^0.25.0",
+    "spatialite": "^0.1.0"
+  }
+}
