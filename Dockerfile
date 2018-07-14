@@ -7,8 +7,9 @@ RUN apt-get update \
 COPY . /app
 WORKDIR /app
 
-RUN rm -rf node_modules
-RUN npm install
+COPY package*.json ./
+RUN npm install --strip
+RUN npm cache clean --force
 
-EXPOSE 8084
+EXPOSE 8080
 CMD ["npm", "start"]

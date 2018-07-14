@@ -3,7 +3,7 @@ const helmet = require('fastify-helmet');
 const boom = require('boom')
 
 const {intersects, getGeom}= require('.');
-const PORT = process.env.PORT || 8084;
+const PORT = process.env.PORT || 8080;
 
 fastify.register(require('fastify-swagger'), {
   mode: 'static',
@@ -40,7 +40,7 @@ fastify.post('/intersects', async (req) => {
 
 const start = async () => {
   try {
-    await fastify.listen(PORT);
+    await fastify.listen(PORT, '0.0.0.0');
   }
   catch (err) {
     fastify.log.error(err);
