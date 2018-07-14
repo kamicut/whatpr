@@ -1,3 +1,4 @@
 {
-  "alias": "whatpr"
+  "alias": "whatpr",
+  "type": "docker"
 }

@@ -7,13 +7,16 @@ Queries on the WRS2 path rows:
 
 Documentation: https://whatpr.now.sh/documentation
 
-### Development
-## Requirements
+## Deployment
+Deployments are run using Docker and pushed to `now.sh`
+
+## Development
+### Requirements
 - make
 - spatialite (`brew install spatialite`)
 - Node 8+
 
-## Rebuilding the db
+### Rebuilding the db
 `make`
 
 ### Tests
