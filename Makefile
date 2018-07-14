@@ -5,7 +5,7 @@ pathrows.db: pathrows/wrs2_descending.shx
 
 pathrows/wrs2_descending.shx: wrs2_descending.zip
 	mkdir -p pathrows
-	unzip -u wrs2_descending.zip -d pathrows
+	unzip -o wrs2_descending.zip -d pathrows
 
 wrs2_descending.zip:
 	wget https://landsat.usgs.gov/sites/default/files/documents/wrs2_descending.zip
