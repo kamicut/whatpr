@@ -1,22 +1,38 @@
 const sqlite = require('spatialite');
-const db = new sqlite.Database('./pathrows.db');
 
 class DBError extends Error {}
 class InvalidArgument extends Error {}
 
 function queryDB(query) {
+  const db = new sqlite.Database('./pathrows.db');
   return new Promise((resolve, reject) => {
     db.spatialite(err => {
-      if (err) reject(DBError(err));
+      if (err) reject(new DBError(err));
       db.all(query, (err, rows) => {
-        if (err) reject(DBError(err));
+        if (err) reject(new DBError(err));
         else resolve(rows);
       });
     });
   });
 }
 
-async function whichpathrow(geometry) {
+function mapRowToFeature(row) {
+  if (!row.GEOM) throw new Error('geometry must exist');
+  let properties = {};
+  for (k in row) {
+    if (k !== 'GEOM') {
+      properties[k] = row[k];
+    }
+  }
+
+  return {
+    type: 'Feature',
+    properties,
+    geometry: JSON.parse(row.GEOM)
+  };
+}
+
+async function intersects(geometry) {
   /* 
   Validate arguments 
   TODO: Should we validate the geometry?
@@ -35,11 +51,7 @@ async function whichpathrow(geometry) {
 
   try {
     const rows = await queryDB(query);
-    const features = rows.map(row => ({
-      type: 'Feature',
-      properties: { path: row.PATH, row: row.ROW },
-      geometry: row.GEOM
-    }));
+    const features = rows.map(mapRowToFeature);
     return {
       type: 'FeatureCollection',
       features
@@ -50,4 +62,20 @@ async function whichpathrow(geometry) {
   }
 }
 
-module.exports = whichpathrow;
+async function getGeom(path, row) {
+  const query = `SELECT PATH,ROW,AsGeoJSON(geometry) as GEOM from pathrows where PATH=${path} and ROW=${row}`;
+  try {
+    const rows = await queryDB(query);
+    const features = rows.map(mapRowToFeature);
+    return features[0];
+
+  } catch (err) {
+    console.error(err)
+    throw new DBError(err);
+  }
+}
+
+module.exports = {
+  intersects,
+  getGeom
+};
