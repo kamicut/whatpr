@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  description: "API to query WRS2 path rows."
+  version: "0.1.0"
+  title: "Whatpr"
+  contact:
+    email: "marcfarra@gmail.com"
+paths:
+  /{path}/{row}:
+    get:
+      description: Get geometry for path row
+      responses:
+        200:
+          description: A successful response
+          content:
+            application/json:
+              example:
+                sceneGeometry:
+                  summary: A GeoJSON Feature representing a WRS2 path/row
+                  value:
+                    type: Feature
+                    properties:
+                      PATH: 42
+                      ROW: 34
+                    geometry:
+                      type: MultiPolygon
+                      coordinates:
+                      - - - - -120.2907264026009
+                            - 36.87056021745927
+                          - - -120.2909999999999
+                            - 36.8706
+                          - - -120.2791506955027
+                            - 36.91224657650555
+                          - - -120.2697837191817
+                            - 36.94516855062426
+                          - - -119.8619999999999
+                            - 38.37839999999999
+                          - - -119.8612231342312
+                            - 38.37828700814986
+                          - - -117.787
+                            - 38.07659999999999
+                          - - -117.810163109382
+                            - 38.00242372285513
+                          - - -118.239330761813
+                            - 36.62808065849252
+                          - - -118.256
+                            - 36.5747
+                          - - -120.2907264026009
+                            - 36.87056021745927
+
+    parameters:
+    - name: path
+      in: path
+      description: WRS2 Path
+      required: true
+      schema:
+        type: number
+    - name: row
+      in: path
+      description: WRS2 Row
+      required: true
+      schema:
+        type: number
+  /intersects:
+    post:
+      description: Get path rows intersection GeoJSON
+      responses:
+        200:
+          description: A successful response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: [Polygon, MultiPolygon]
+                coordinates: 
+                  type: array
+                  items:
+                    type: array
+                    minItems: 3
+                    items:
+                      type: number
+                      minItems: 2
+                      maxItems: 2
+
+            example:
+              boundaryPolygon:
+                summary: 'A boundary polygon'
+                value:
+                  type: Polygon
+                  coordinates:
+                  - - - -119.49075
+                      - 38.90475
+                    - - -122.39589
+                      - 38.30397
+                    - - -121.58167
+                      - 36.0251
+                    - - -118.75856
+                      - 36.60807
+                    - - -119.49075
+                      - 38.90475
