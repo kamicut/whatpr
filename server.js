@@ -18,39 +18,17 @@ fastify.register(require('fastify-swagger'), {
 fastify.register(helmet);
 fastify.register(require('fastify-boom'));
 
-const pathrowopts = {
-  schema: {
-    description: 'Get geometry for path row',
-    params: {
-      type: 'object',
-      properties: {
-        path: {
-          type: 'number',
-          description: 'WRS2 Path'
-        },
-        row: {
-          type: 'number',
-          description: 'WRS2 Row'
-        }
-      }
-    },
-  }
-}
-fastify.get('/:path/:row', pathrowopts, async (req, res) => {
+fastify.get('/', (req, res) => {
+  res.redirect('/documentation/json');
+});
+
+fastify.get('/:path/:row', async (req) => {
   const {path, row} = req.params;
   const feature = await getGeom(path, row);
   return feature;
 });
 
-const intersectopts = {
-  schema: {
-    description: 'Get path rows intersecting GeoJSON',
-   },
-   body: {
-     type: 'object'
-   }
-}
-fastify.post('/intersects', intersectopts, async (req, res) => {
+fastify.post('/intersects', async (req) => {
   const { body } = req;
   if (!body) {
     throw boom.badRequest('No geojson provided')
